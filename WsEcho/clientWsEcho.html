@@ -23,9 +23,9 @@
 				var host = "ws://localhost:8088/phpwebsockets/server.php";
 				try {
 					if('WebSocket' in window) {
-						socket = new WebSocket(host, "Foo");
+						socket = new WebSocket(host, "WsEcho");
 					} else if('MozWebSocket' in window) {
-						socket = new MozWebSocket(host, "Foo");
+						socket = new MozWebSocket(host, "WsEcho");
 					} else {
 						log('WebSockets not support on this browser');
 						return;
