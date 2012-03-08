@@ -22,13 +22,10 @@ function GetSocket($address, $port, $log){
 }
 
 /**
- * Simple log function which appends a message to a log file
- * $log is the file path for the log file
- * $msg is the message to be added to the log file
+ * Log a message.
+ * @param string $msg Message to log.
  */
 function logToFile($msg) {
-    global $log;
-
     //file_put_contents($log, $msg, FILE_APPEND);
     echo $msg, PHP_EOL;
 }
