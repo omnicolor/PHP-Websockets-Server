@@ -28,7 +28,8 @@ function GetSocket($address, $port, $log){
 function logToFile($msg) {
 	global $log;
 
-	file_put_contents($log, $msg, FILE_APPEND);
+	//file_put_contents($log, $msg, FILE_APPEND);
+    echo $msg, PHP_EOL;
 }
 
 function WsConnect($socket){
