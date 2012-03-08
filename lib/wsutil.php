@@ -64,14 +64,22 @@ function WsDisconnect($socket){
   if($index>=0){ array_splice($sockets,$index,1); }
 }
 
-function WsGetUserBySocket($socket){
-  global $users;
-  $found=null;
-  foreach($users as $user){
-    if($user->socket()==$socket){ $found=$user; break; }
-  }
-  return $found;
+
+/**
+ * Get the user associated with a socket.
+ * @param resource $socket Socket to find the user for.
+ * @param array $users Array of WsUser objects.
+ * @return WsUser User associated with a socket..
+ */
+function WsGetUserBySocket($socket, $users) {
+    foreach ($users as $user) {
+        if ($user->socket() == $socket) {
+            return $user;
+        }
+    }
+    return null;
 }
+
 
 function WsParseHeaders( $header )
 {
