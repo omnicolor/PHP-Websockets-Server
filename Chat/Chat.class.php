@@ -6,6 +6,9 @@
 require_once "./lib/wsapp.interface.php";
 
 
+/**
+ * Simple chat client.
+ */
 class Chat implements WSApp {
     /**
      * @var string Name of the application.
@@ -13,16 +16,17 @@ class Chat implements WSApp {
     public static $app_name = 'chat';
 
     /**
-     * @var WSProtocol
+     * @var WSProtocol Protocol this instance of the chat client is using.
      */
     private $protocol;
+
 
     /**
      * Handle a message sent by the user.
      * @param array $msg Message array.
      * @param array $users Array of users.
      */
-    function onMessage($msg, $users = array()) {
+    public function onMessage($msg, $users = array()) {
         $size = $msg['size'];
         $data = $msg['frame'];
         echo "In Chat Class onMessage: just received ".$data." \n";
@@ -33,15 +37,26 @@ class Chat implements WSApp {
         }
     }
 
-    function onClose() {
+    /**
+     * Called when the client quits.
+     */
+    public function onClose() {
         echo "In Chat Class onClose: closing connection \n";
     }
 
-    function onError($err) {
+    /**
+     * Called if there is an error communicating with the chat client.
+     * @param string $err Error message.
+     */
+    public function onError($err) {
         echo "In Chat Class onError: closing connection \n";
     }
 
-    function setProtocol(WSProtocol $protocol) {
+    /**
+     * Set the protocol the app should use with the user.
+     * @param WSProtocol $protocol Protocol to use when communicating.
+     */
+    public function setProtocol(WSProtocol $protocol) {
         $this->protocol = $protocol;
     }
 }
