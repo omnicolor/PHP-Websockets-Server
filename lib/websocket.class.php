@@ -18,21 +18,21 @@ class WebSocket {
 	private $user;
 	private $log;
 	private $wsapp;
-	
+
 	/**
-	 * Default constructor 
+	 * Default constructor
 	 * $user is the WSUser object associated with the request
 	 * $log is the path for the log file
 	 */
 	function WebSocket(WsUser $user, $log) {
 		$this->user = $user;
 	}
-	
+
 	/**
 	 * Entry point for all client requests. This function
 	 * determines if handshaking has been done and if not selects the
 	 * specific handshaking protocol and invokes it.
-	 * 
+	 *
 	 * If handshaking has been done this function dispatches the request
 	 * to the service bound to the request associated with the user object
 	 */
@@ -69,7 +69,7 @@ class WebSocket {
 					$protocol->setSocket($socket);
 					$result = $protocol->read();
 					$bytesRead = $result['size'];
-					
+
 					if($bytesRead !== -1 && $bytesRead !== -2) {
 						$protocol->send($result);
 					} else {
@@ -126,7 +126,7 @@ class WebSocket {
 		}
 		return;
 	}
-	
+
 	/**
 	 * Takes the appropriate action to close the connection down
 	 */
@@ -139,9 +139,9 @@ class WebSocket {
 			//send a status code and then close
 		}
 	}
-	
+
 	/**
-	 * Looks at the headers to determine which handshaker to 
+	 * Looks at the headers to determine which handshaker to
 	 * use
 	 * $headers are the headers in the request
 	 */
@@ -152,7 +152,7 @@ class WebSocket {
 			// to be semantic changes in the specification
 			// Forcing version numbers above 8 to be HyBi, things might fail if actual protocol
 			// changes are made but at least the resulting errors will be more informative
-			if($headers['Sec-WebSocket-Version'] >= '8') { 
+			if($headers['Sec-WebSocket-Version'] >= '8') {
 				// This is the HyBI handshaker
 				return new HandshakeHyBi();
 			}
@@ -163,9 +163,9 @@ class WebSocket {
 			return new Handshake76();
 		}
 		// Must be draft 75
-		
+
 		return new Handshake75();
 	}
-	
+
 }
 ?>

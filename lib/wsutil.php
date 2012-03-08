@@ -8,7 +8,7 @@ require_once 'wsuser.class.php';
  * $log is the log file reference.
  */
 function GetSocket($address, $port, $log){
-  
+
   $master=socket_create(AF_INET, SOCK_STREAM, SOL_TCP)     or die("socket_create() failed");
   socket_set_option($master, SOL_SOCKET, SO_REUSEADDR, 1)  or die("socket_option() failed");
   socket_bind($master, $address, $port)                    or die("socket_bind() failed");
@@ -27,7 +27,7 @@ function GetSocket($address, $port, $log){
  */
 function logToFile($msg) {
 	global $log;
-	
+
 	file_put_contents($log, $msg, FILE_APPEND);
 }
 
@@ -110,6 +110,6 @@ function getAppID($resource) {
 	if(count($fields) === 2)
 		return $fields[1];
 	return '_ECHO_';
-	
+
 }
 ?>

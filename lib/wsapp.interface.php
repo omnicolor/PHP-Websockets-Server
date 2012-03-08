@@ -3,7 +3,7 @@
     	/**
 		 * Set the set the Websocket protocol class
 		 * over which this application is being called
-		 * This is needed for the application to send data back 
+		 * This is needed for the application to send data back
 		 * to the client
 		 */
     	function setProtocol(WSProtocol $protocol);

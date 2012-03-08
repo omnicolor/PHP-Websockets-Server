@@ -1,10 +1,10 @@
-#!/usr/bin/php 
+#!/usr/bin/php
 <?php
 
 /***
 * Make adjustments for your install
 *
-*/ 
+*/
 
 require_once "lib/wsutil.php";
 require_once "lib/websocket.class.php";

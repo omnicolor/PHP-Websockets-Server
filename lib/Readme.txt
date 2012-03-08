@@ -1,16 +1,16 @@
-This directory contains the implementation of the PHP Websockets Server. 
+This directory contains the implementation of the PHP Websockets Server.
 
 The main class is implemented in websocket.class.php which implements the main
 body of the service and is the first point of call for any client interaction. If no application
-protocol is supplied by the client by default this class simply echos the information sent from 
+protocol is supplied by the client by default this class simply echos the information sent from
 a client. It is expected that developers extend the service by implementing application protocols.
 
 Handshakers.
-Because WebSockets is an evoling protocol there are a number of versions. One of the 
-key differences between versions is the way handshaking is done. The server has been 
+Because WebSockets is an evoling protocol there are a number of versions. One of the
+key differences between versions is the way handshaking is done. The server has been
 implemented to support the independant evolution of the standard with the evolution of
 user clients. The server will automatically choose the correct handshake based on the client
-request. 
+request.
 
 The file handshaker.interface.php defines an abstract class that all handshake implementations
 must implement. Implementations of the Handshaker interface are have names that start with handshake.

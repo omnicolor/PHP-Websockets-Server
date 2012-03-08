@@ -7,9 +7,9 @@
 require_once "./lib/wsapp.interface.php";
     class Bar implements WSApp {
     	 public static $app_name = 'Bar';
-		 
+
 		 private $protocol;
-		 
+
 		function onMessage($msg) {
 			$size = $msg['size'];
 			$data = $msg['frame'];
@@ -20,7 +20,7 @@ require_once "./lib/wsapp.interface.php";
 			echo "closing connection \n";
 		}
 		function onError($err) {
-			
+
 		}
 		function setProtocol(WSProtocol $protocol) {
 			$this->protocol = $protocol;

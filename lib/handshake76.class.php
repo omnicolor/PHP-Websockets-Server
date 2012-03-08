@@ -8,8 +8,8 @@ require_once 'protocol76.class.php';
  */
 class Handshake76 implements Handshaker {
 	/**
-	 * Perform the handshake 
-	 * 
+	 * Perform the handshake
+	 *
 	 * $user - the user/client that initiated connection
 	 * $headers - an array of HTTP headers sent by the user
 	 */
@@ -17,7 +17,7 @@ class Handshake76 implements Handshaker {
 		// Grab the security keys
 		$strkey1 = $headers['Sec-WebSocket-Key1'];
 		$strkey2 = $headers['Sec-WebSocket-Key2'];
-		
+
 		// Grab the other items needed to reply
 		$data = $headers['body'];
 		$origin = $headers['Origin'];
@@ -35,35 +35,35 @@ class Handshake76 implements Handshaker {
 		} else
 			$app = getAppID($resource);
 		$user->setAppID($app);
-		
-		
-		
+
+
+
 		// Compute the hash from the keys provided
 		$pattern = '/[^\d]*/';
 	  	$replacement = '';
 	  	$numkey1 = preg_replace($pattern, $replacement, $strkey1);
 	  	$numkey2 = preg_replace($pattern, $replacement, $strkey2);
-		
+
 		$pattern = '/[^ ]*/';
 	  	$replacement = '';
 	  	$spaces1 = strlen(preg_replace($pattern, $replacement, $strkey1));
 	  	$spaces2 = strlen(preg_replace($pattern, $replacement, $strkey2));
-		
+
 		if ($spaces1 == 0 || $spaces2 == 0 || fmod($numkey1, $spaces1) != 0 || fmod($numkey2, $spaces2) != 0) {
 	        if(isset($user->socket))
 	        	WsDisconnect($user->socket());
 			echo("failed handshake\n");
 	        return false;
 	  	}
-		
+
 		$ctx = hash_init('md5');
-		
+
 		// Pack the has for tranmission
 	  	hash_update($ctx, pack("N", $numkey1/$spaces1));
 	  	hash_update($ctx, pack("N", $numkey2/$spaces2));
 	  	hash_update($ctx, $data);
 	  	$hash_data = hash_final($ctx,true);
-		
+
 		// Send the upgrade response
 		if(isset($headers['Sec-WebSocket-Protocol'])) {
 	  		$upgrade  = "HTTP/1.1 101 WebSocket Protocol Handshake\r\n" .
@@ -82,9 +82,9 @@ class Handshake76 implements Handshaker {
 	              "Sec-WebSocket-Location: ws://" . $host . $statusFields[1] . "\r\n" .
 	              "\r\n" .
 	              $hash_data;
-			
+
 		}
-		
+
 		socket_write($user->socket(),$upgrade,strlen($upgrade));
 		$user->setHandshakeDone();
 		// $user->setTranscoder(new BasicTranscoder());

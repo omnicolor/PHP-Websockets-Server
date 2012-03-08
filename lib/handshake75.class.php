@@ -12,7 +12,7 @@ class Handshake75 implements Handshaker {
 	 * $headers - an array containing the HTTP headers sent
 	 */
 	function dohandshake(WsUser $user,$headers) {
-		
+
 		$origin = $headers['Origin'];
 		$host = $headers['Host'];
 		$status = $headers['status'];
@@ -26,7 +26,7 @@ class Handshake75 implements Handshaker {
 		} else
 			$app = getAppID($resource);
 		$user->setAppID($app);
-		
+
 		$upgrade  = "HTTP/1.1 101 WebSocket Protocol Handshake\r\n" .
 	              "Upgrade: WebSocket\r\n" .
 	              "Connection: Upgrade\r\n" .
@@ -35,13 +35,13 @@ class Handshake75 implements Handshaker {
 	              "Sec-WebSocket-Location: ws://" . $host . $statusFields[1] . "\r\n" .
 	              "\r\n" .
 	              "\r\n";
-				  
-	   	
+
+
 		socket_write($user->socket(),$upgrade,strlen($upgrade));
 		$user->setHandshakeDone();
 		;
 		$user->setProtocol(new Protocol76());
-		
+
 		return;
 	}
 }

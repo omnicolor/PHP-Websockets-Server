@@ -6,9 +6,9 @@
 require_once "./lib/wsapp.interface.php";
     class Foo implements WSApp {
     	 public static $app_name = 'foo';
-		 
+
 		 private $protocol;
-		 
+
 		function onMessage($msg) {
 			$size = $msg['size'];
 			$data = $msg['frame'];
@@ -22,7 +22,7 @@ require_once "./lib/wsapp.interface.php";
 		function onError($err) {
 			echo "In Foo Class onError: closing connection \n";
 		}
-		
+
 		function setProtocol(WSProtocol $protocol) {
 			$this->protocol = $protocol;
 		}
