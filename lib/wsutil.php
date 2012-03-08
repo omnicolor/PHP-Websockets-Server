@@ -26,9 +26,9 @@ function GetSocket($address, $port, $log){
  * $msg is the message to be added to the log file
  */
 function logToFile($msg) {
-	global $log;
+    global $log;
 
-	//file_put_contents($log, $msg, FILE_APPEND);
+    //file_put_contents($log, $msg, FILE_APPEND);
     echo $msg, PHP_EOL;
 }
 
@@ -84,20 +84,20 @@ function WsParseHeaders2($headers=false){
     if($headers === false){
         return false;
         }
-	$statusDone = false;
+    $statusDone = false;
     $headers = str_replace("\r","",$headers);
     $headers = explode("\n",$headers);
     foreach($headers as $value){
         $header = explode(": ",$value);
-		if(count($header) == 1) {
+        if(count($header) == 1) {
         // if($header[0] && !$header[1]){
-        	if(!$statusDone) {
-            	$headerdata['status'] = $header[0];
-				$statusDone = true;
-			} else {
-				$headerdata['body'] = $header[0];
-				//return $headerdata;
-			}
+            if(!$statusDone) {
+                $headerdata['status'] = $header[0];
+                $statusDone = true;
+            } else {
+                $headerdata['body'] = $header[0];
+                //return $headerdata;
+            }
         }
         elseif($header[0] && $header[1]){
             $headerdata[$header[0]] = $header[1];
@@ -107,10 +107,10 @@ function WsParseHeaders2($headers=false){
 }
 
 function getAppID($resource) {
-	$fields = explode("?", $resource);
-	if(count($fields) === 2)
-		return $fields[1];
-	return '_ECHO_';
+    $fields = explode("?", $resource);
+    if(count($fields) === 2)
+        return $fields[1];
+    return '_ECHO_';
 
 }
 ?>
