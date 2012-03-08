@@ -11,7 +11,7 @@ class WsEcho implements WSApp {
 
     private $protocol;
 
-    function onMessage($msg) {
+    function onMessage($msg, $users = array()) {
         $size = $msg['size'];
         $data = $msg['frame'];
         echo "In WsEcho Class onMessage: just received ".$data." \n";

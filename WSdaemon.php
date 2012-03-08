@@ -77,7 +77,7 @@ while(true) {
             // Existing client sent something.
             $user = WsGetUserBySocket($socket, $users);
             $ws = new WebSocket($user, $log);
-            $ws->handleRequest($socket);
+            $ws->handleRequest($socket, $users);
         }
     }
 }

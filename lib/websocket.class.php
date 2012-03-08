@@ -39,14 +39,18 @@ class WebSocket {
      * If handshaking has been done this function dispatches the request
      * to the service bound to the request associated with the user object
      * @param resource $socket Socket making a request.
+     * @param array $users Other users.
      */
-    public function handleRequest($socket) {
+    public function handleRequest($socket, $users) {
         // Check the handshake required
         if(!$this->user->handshakeDone()) {
             $this->handshake($socket);
             return;
         }
         $appID = $this->user->appId();
+
+        // Remove the current user from the user list.
+        $users = array_diff($users, array($this->user));
 
         // Load the application class and send the message
         try {
@@ -60,7 +64,7 @@ class WebSocket {
                 $result = $protocol->read();
                 $bytesRead = $result['size'];
                 if ($bytesRead !== -1 && $bytesRead !== -2) {
-                    $this->wsapp->onMessage($result);
+                    $this->wsapp->onMessage($result, $users);
                 } else {
                     $this->wsapp->onError();
                     $protocol->close();

@@ -16,8 +16,10 @@ interface WSApp {
      *     'frame': A buffer containing the data received
      *     'binary': boolean indicator true is frame is binary false if frame is utf8
      *  }
+     * @param array $msg Message that was sent.
+     * @param array $users Optional array of other users.
      */
-    function onMessage($msg);
+    function onMessage($msg, $users = array());
 
     /**
      * Called when the client closes connection
