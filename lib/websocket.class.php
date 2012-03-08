@@ -27,7 +27,7 @@ class WebSocket {
      * Default constructor
      * $user is the WSUser object associated with the request
      */
-    function WebSocket(WsUser $user) {
+    public function __construct(WsUser $user) {
         $this->user = $user;
     }
 
@@ -39,7 +39,7 @@ class WebSocket {
      * If handshaking has been done this function dispatches the request
      * to the service bound to the request associated with the user object
      */
-    function handleRequest($socket) {
+    public function handleRequest($socket) {
         // Check the handshake required
         if(!$this->user->handshakeDone()) {
             logToFile($socket."Performing the handshake\n");
@@ -85,8 +85,7 @@ class WebSocket {
                     $this->sendFatalErrorResponse();
                     return;
                 }
-            }
-            catch (WSClientClosedException $e) {
+            } catch (WSClientClosedException $e) {
                 return;
             }
         } else {
@@ -115,13 +114,11 @@ class WebSocket {
                 } else {
                     $this->sendFatalErrorResponse();
                 }
-            }
-            catch (WSClientClosedException $e) {
+            } catch (WSClientClosedException $e) {
                 if(isset($this->wsapp))
                     $this->wsapp->onClose();
                 return;
-            }
-            catch (WSAppNotInstalled $e) {
+            } catch (WSAppNotInstalled $e) {
                 //$this->sendFatalErrorResponse();
                 WsDisconnect($socket);
                 return;
@@ -138,8 +135,6 @@ class WebSocket {
         if(!$this->user->handshakeDone()) {
             WsDisconnect($this->user->socket());
             return;
-        } else {
-            //send a status code and then close
         }
     }
 
@@ -169,5 +164,4 @@ class WebSocket {
 
         return new Handshake75();
     }
-
 }
