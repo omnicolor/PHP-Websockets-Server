@@ -38,31 +38,13 @@ class WebSocket {
      *
      * If handshaking has been done this function dispatches the request
      * to the service bound to the request associated with the user object
+     * @param resource $socket Socket making a request.
      */
     public function handleRequest($socket) {
         // Check the handshake required
         if(!$this->user->handshakeDone()) {
-            logToFile($socket."Performing the handshake\n");
-            $bytes = @socket_recv($socket, $buffer, 2048, 0);
-            if($bytes == 0) {
-                    WsDisconnect($socket);
-                    logToFile($socket." DISCONNECTED!");
-                    return;
-            }
-            $headers = WsParseHeaders2($buffer);
-            if(count($headers) == 0 || !isset($headers['Upgrade'])) {
-                // Not good send back an error status
-                $this->sendFatalErrorResponse();
-                return;
-            } else {
-                if(strtolower($headers['Upgrade']) != 'websocket')
-                    $this->sendFatalErrorResponse();
-                // now get the handshaker for this request
-                $hs = $this->getHandshaker($headers);
-                $hs->dohandshake($this->user, $headers);
-                logToFile($socket."Handshake Done\n");
-                return;
-            }
+            $this->handshake($socket);
+            return;
         }
         $appID = $this->user->appId();
         if($appID === "_ECHO_") {
@@ -126,6 +108,35 @@ class WebSocket {
         }
         return;
     }
+
+
+    /**
+     * Perform a handshake with the user.
+     * @param resource $socket Socket to handshake with.
+     */
+    private function handshake($socket) {
+        logToFile($socket."Performing the handshake\n");
+        $bytes = @socket_recv($socket, $buffer, 2048, 0);
+        if ($bytes == 0) {
+            WsDisconnect($socket);
+            logToFile($socket." DISCONNECTED!");
+            return;
+        }
+        $headers = WsParseHeaders2($buffer);
+        if (count($headers) == 0 || !isset($headers['Upgrade'])) {
+            // Not good send back an error status
+            $this->sendFatalErrorResponse();
+            return;
+        }
+        if (strtolower($headers['Upgrade']) != 'websocket') {
+            $this->sendFatalErrorResponse();
+        }
+        // now get the handshaker for this request
+        $hs = $this->getHandshaker($headers);
+        $hs->dohandshake($this->user, $headers);
+        logToFile($socket."Handshake Done\n");
+    }
+
 
     /**
      * Takes the appropriate action to close the connection down
