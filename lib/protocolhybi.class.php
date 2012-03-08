@@ -6,7 +6,11 @@ require_once "wsexceptions.class.php";
  * Implements version 10 of the current HyBi protocol
  */
 class ProtocolHyBi implements WSProtocol {
+    /**
+     * @var Resource Socket for the protocol.
+     */
     private $socket;
+
     private $state = 0;
     private $frameFin = false;
     private $frameR1 = false;
@@ -24,11 +28,22 @@ class ProtocolHyBi implements WSProtocol {
 
 
     /**
-     * Sets the socket to be used by the class
+     * Sets the socket to be used by the protocol.
+     * @param Resource $socket Socket to by used for the protocol.
      */
-    function setSocket($socket) {
+    public function setSocket($socket) {
         $this->socket = $socket;
     }
+
+
+    /**
+     * Return the protocol's socket.
+     * @return Resource
+     */
+    public function getSocket() {
+        return $this->socket;
+    }
+
 
     /**
      * Reads a packet of data from the websocket and parses it into the following structure
