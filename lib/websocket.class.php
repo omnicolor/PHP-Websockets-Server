@@ -47,66 +47,36 @@ class WebSocket {
             return;
         }
         $appID = $this->user->appId();
-        if($appID === "_ECHO_") {
-            try {
-                $protocol = $this->user->protocol();
-                if(isset($protocol)) {
-                    $protocol->setSocket($socket);
-                    $result = $protocol->read();
-                    $bytesRead = $result['size'];
 
-                    if($bytesRead !== -1 && $bytesRead !== -2) {
-                        $protocol->send($result);
-                    } else {
-                        // badness must close
-                        $protocol->close();
-                        //WsDisconnect($socket);
-                        return;
-                    }
+        // Load the application class and send the message
+        try {
+            AppFactory::autoload($appID);
+            $this->wsapp = AppFactory::create($appID);
+            $protocol = $this->user->protocol();
+            if(isset($protocol)) {
+                $protocol->setSocket($socket);
+                $this->wsapp->setProtocol($protocol);
+                $result = $protocol->read();
+                $bytesRead = $result['size'];
+                if($bytesRead !== -1 && $bytesRead !== -2) {
+                    $this->wsapp->onMessage($result);
                 } else {
-                    $this->sendFatalErrorResponse();
+                    $this->wsapp->onError();
+                    $protocol->close();
+                    WsDisconnect($socket);
                     return;
                 }
-            } catch (WSClientClosedException $e) {
-                return;
+            } else {
+                $this->sendFatalErrorResponse();
             }
-        } else {
-            // Load the application class and send the message
-            try {
-                AppFactory::autoload($appID);
-                $this->wsapp = AppFactory::create($appID);
-                $protocol = $this->user->protocol();
-                if(isset($protocol)) {
-                    $protocol->setSocket($socket);
-                    $this->wsapp->setProtocol($protocol);
-                    $result = $protocol->read();
-                    $bytesRead = $result['size'];
-                    if($bytesRead !== -1 && $bytesRead !== -2) {
-                        $this->wsapp->onMessage($result);
-                        /* if($resp['size'] != 0) {
-                            logToFile($socket."Calling send on APP\n");
-                            $protocol->send($resp);
-                        } */
-                    } else {
-                        $this->wsapp->onError();
-                        $protocol->close();
-                        WsDisconnect($socket);
-                        return;
-                    }
-                } else {
-                    $this->sendFatalErrorResponse();
-                }
-            } catch (WSClientClosedException $e) {
-                if(isset($this->wsapp))
-                    $this->wsapp->onClose();
-                return;
-            } catch (WSAppNotInstalled $e) {
-                //$this->sendFatalErrorResponse();
-                WsDisconnect($socket);
-                return;
-            }
+        } catch (WSClientClosedException $e) {
+            if(isset($this->wsapp))
+                $this->wsapp->onClose();
+            return;
+        } catch (WSAppNotInstalled $e) {
+            WsDisconnect($socket);
+            return;
         }
-        return;
     }
 
 
