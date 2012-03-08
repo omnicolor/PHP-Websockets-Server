@@ -53,12 +53,13 @@ class WebSocket {
             AppFactory::autoload($appID);
             $this->wsapp = AppFactory::create($appID);
             $protocol = $this->user->protocol();
-            if(isset($protocol)) {
+
+            if (isset($protocol)) {
                 $protocol->setSocket($socket);
                 $this->wsapp->setProtocol($protocol);
                 $result = $protocol->read();
                 $bytesRead = $result['size'];
-                if($bytesRead !== -1 && $bytesRead !== -2) {
+                if ($bytesRead !== -1 && $bytesRead !== -2) {
                     $this->wsapp->onMessage($result);
                 } else {
                     $this->wsapp->onError();
@@ -70,8 +71,9 @@ class WebSocket {
                 $this->sendFatalErrorResponse();
             }
         } catch (WSClientClosedException $e) {
-            if(isset($this->wsapp))
+            if(isset($this->wsapp)) {
                 $this->wsapp->onClose();
+            }
             return;
         } catch (WSAppNotInstalled $e) {
             WsDisconnect($socket);
