@@ -71,7 +71,7 @@ while(true) {
                 logToFile("socket_accept() failed");
                 continue;
             }
-            WsConnect($client, $sockets, $users);
+            list($users, $sockets) = WsConnect($client, $sockets, $users);
             logToFile($client." CONNECTED\n");
         } else {
             // Existing client sent something.

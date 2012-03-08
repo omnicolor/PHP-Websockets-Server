@@ -1,6 +1,7 @@
 <?php
 
 require_once 'wsuser.class.php';
+
 /**
  * Creates and returns the socket on which the server will listen
  * $address is the address at which the server is listening
@@ -32,13 +33,22 @@ function logToFile($msg) {
     echo $msg, PHP_EOL;
 }
 
-function WsConnect($socket){
-  global $sockets, $users;
+
+/**
+ * Connect a new client.
+ * @param resource $socket Socket that is connecting.
+ * @param array $sockets List of sockets that are connected.
+ * @param array $users List of users.
+ * @return array Array of users and socket arrays (users, sockets).
+ */
+function WsConnect($socket, $sockets, $users){
   $user = new WsUser();
   $user->setSocket($socket);
-  array_push($users,$user);
-  array_push($sockets,$socket);
+  array_push($users, $user);
+  array_push($sockets, $socket);
+  return array($users, $sockets);
 }
+
 
 function WsDisconnect($socket){
   global $sockets, $users;
