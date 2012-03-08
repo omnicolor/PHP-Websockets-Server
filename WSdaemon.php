@@ -63,16 +63,18 @@ $users = array();
 while(true) {
     $changed = $sockets;
     socket_select($changed, $write = NULL, $except = NULL, NULL);
-    foreach($changed as $socket) {
-        if($socket == $master) {
+    foreach ($changed as $socket) {
+        if ($socket == $master) {
+            // New client has connected.
             $client = socket_accept($master);
-            if($client < 0) { logToFile("socket_accept() failed");
-                continue ;
-            } else {
-                WsConnect($client, $sockets, $users);
-                logToFile($client." CONNECTED\n");
+            if ($client < 0) {
+                logToFile("socket_accept() failed");
+                continue;
             }
+            WsConnect($client, $sockets, $users);
+            logToFile($client." CONNECTED\n");
         } else {
+            // Existing client sent something.
             $user = WsGetUserBySocket($socket, $users);
             $ws = new WebSocket($user, $log);
             $ws->handleRequest($socket);
