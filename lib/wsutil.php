@@ -123,4 +123,3 @@ function getAppID($resource) {
     return '_ECHO_';
 
 }
-?>
