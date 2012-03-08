@@ -1,69 +1,95 @@
 <?php
+/**
+ * User connected to the application.
+ */
 
 require_once 'wsuser.class.php';
 require_once 'handshaker.interface.php';
 require_once "wsprotocol.interface.php";
 
+/**
+ * User connected to the application.
+ */
 class WsUser {
+    /**
+     * @var string Unique ID for the user.
+     */
+    private $id;
 
-	private $id;
-	private $socket;
-	private $handshake_done = false;
-	private $transcoder;
-	private $appId;
-	private $protocol;
+    /**
+     * @var Resource Socket resource.
+     */
+    private $socket;
 
-	/**
-	 * Class Constructor for the WsUser Object
-	 *
-	 */
-	function WsUser() {
-		$this->id = uniqid();
-	}
+    /**
+     * @var boolean Whether the handshake is complete.
+     */
+    private $handshake_done = false;
 
-	function id() {
-		return $this->id;
-	}
+    /**
+     * @var MessageTranscoder
+     */
+    private $transcoder;
 
-	function setSocket($socket) {
-		$this->socket = $socket;
-	}
+    /**
+     * @var string ID of the application the user connected to.
+     */
+    private $appId;
 
-	function socket() {
-		return $this->socket;
-	}
+    /**
+     * @var WSProtocol Protocol the user's browser connected with.
+     */
+    private $protocol;
 
-	function setHandshakeDone() {
-		$this->handshake_done = true;
-	}
 
-	function handshakeDone() {
-		return $this->handshake_done;
-	}
+    /**
+     * Class Constructor for the WsUser Object
+     */
+    public function __construct() {
+        $this->id = uniqid();
+    }
 
-	function setTranscoder(MessageTranscoder $transcoder) {
-		$this->transcoder = $transcoder;
-	}
+    public function id() {
+        return $this->id;
+    }
 
-	function transcoder() {
-		return $this->transcoder;
-	}
+    public function setSocket($socket) {
+        $this->socket = $socket;
+    }
 
-	function setProtocol(WSProtocol $protocol) {
-		$this->protocol = $protocol;
-	}
+    public function socket() {
+        return $this->socket;
+    }
 
-	function protocol() {
-		return $this->protocol;
-	}
+    public function setHandshakeDone() {
+        $this->handshake_done = true;
+    }
 
-	function setAppID($app) {
-		$this->appId = $app;
-	}
+    public function handshakeDone() {
+        return $this->handshake_done;
+    }
 
-	function appId() {
-		return $this->appId;
-	}
+    public function setTranscoder(MessageTranscoder $transcoder) {
+        $this->transcoder = $transcoder;
+    }
 
+    public function transcoder() {
+        return $this->transcoder;
+    }
+
+    public function setProtocol(WSProtocol $protocol) {
+        $this->protocol = $protocol;
+    }
+
+    public function protocol() {
+        return $this->protocol;
+    }
+
+    public function setAppID($app) {
+        $this->appId = $app;
+    }
+
+    public function appId() {
+        return $this->appId;
+    }
 }
-?>
