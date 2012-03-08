@@ -49,6 +49,16 @@ class WsUser {
         $this->id = uniqid();
     }
 
+
+    /**
+     * Return a text representation of the user.
+     * @return string
+     */
+    public function __toString() {
+        return $this->id;
+    }
+
+
     public function id() {
         return $this->id;
     }
